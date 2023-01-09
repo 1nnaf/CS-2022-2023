@@ -1,0 +1,153 @@
+# CS-2022-2023
+
+
+#include <iostream>
+
+int colorOfCard(int x) {
+	return x/100000; 
+}
+
+int valueOfCard(int z) {
+	return (z / 10) % 100;
+}
+
+bool cardValidation(int y) {
+	int color = colorOfCard(y);
+	int value = valueOfCard(y);
+
+	if (color < 1 || color > 5) {
+		std::cout << "Invalid card";
+		return false;
+	}
+	if (value > 14) {
+		std::cout << "Invalid card";
+		return false;
+	}
+	if (value <= 12 && color == 5) {
+		std::cout << "Invalid card";
+		return false;
+		
+	}
+	if (value >= 13 && color != 5) {
+		std::cout << "Invalid card";
+		return false;
+	}
+	return true;
+}
+
+void printCard(int card) {
+	int color = colorOfCard(card);
+	int value = valueOfCard(card);
+
+	std::cout << "(";
+
+	switch (color)
+	{
+	case 1:
+		std::cout << "YELLOW" << ' ';
+		break;
+	case 2:
+		std::cout << "GREEN" << ' ';
+		break;
+	case 3:
+		std::cout << "BLUE" << ' ';
+		break;
+	case 4:
+		std::cout << "RED" << ' ';
+		break;
+	case 5:
+		break;
+	}
+	if (value < 10) {
+		switch (value)
+		{
+		case 1:
+			std::cout << "1"; 
+			break;
+		case 3:
+			std::cout << "3";
+			break;
+		case 4:
+			std::cout << "4";
+			break;
+		case 5:
+			std::cout << "5";
+			break;
+		case 6:
+			std::cout << "6";
+			break;
+		case 7:
+			std::cout << "7";
+			break;
+		case 8:
+			std::cout << "8";
+			break;
+		case 9:
+			std::cout << "9";
+			break;
+		}
+	}
+	else{
+		switch (value) {
+		case 10:
+			std::cout << "+2";
+			break;
+		case 11:
+			std::cout << "REVERSE";
+			break;
+		case 12:
+			std::cout << "STOP";
+			break;
+		case 13:
+			std::cout << "CHANGE COLOR";
+			break;
+		case 14:
+			std::cout << "+4";
+			break;
+		}
+	}
+
+	std::cout << ")";
+}
+
+bool  compareCards(int card1, int card2) {
+	if ( (card1 / 10) % 100 == (card2 / 10) % 100 ) {
+			return card1 / 100000 < card2 / 100000;  // true if the first is smaller than the second (by color)
+	}
+	else {
+		return (card1 / 10) % 100 < (card2 / 10) % 100; // true if the first is smaller than the second (by value)
+	}
+}
+
+int main()
+{
+	int n;
+	std::cin >> n;
+	int *card = new int[n];
+
+	for (int i = 0; i < n; ++i) {
+		std::cin >> card[i];
+		
+		if (!cardValidation(card[i])) {
+			return 0;
+		}
+	}
+
+	for (int i = 0; i < n - 1; ++i) { // bubble sort 
+		for (int j = 0; j < n - i - 1; ++j) {
+			if (!compareCards(card[j], card[j + 1])) { //if they are in the wrong way, we are swapping them
+				int temp = card[j];
+				card[j] = card[j + 1];
+				card[j + 1] = temp;
+			}
+		}
+	}
+
+	for (int i = 0; i < n; ++i) {
+		printCard(card[i]);
+	}
+
+	delete[] card;
+
+	return 0;
+}
